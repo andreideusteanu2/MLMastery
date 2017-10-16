@@ -1,0 +1,61 @@
+x1<-c(2.7810836,
+      1.465489372,
+      3.396561688,
+      1.38807019,
+      3.06407232,
+      7.627531214,
+      5.332441248,
+      6.922596716,
+      8.675418651,
+      7.673756466)
+x2<-c(2.550537003,
+      2.362125076,
+      4.400293529,
+      1.850220317,
+      3.005305973,
+      2.759262235,
+      2.088626775,
+      1.77106367,
+      -0.2420686549,
+      3.508563011)
+y<-c(0,
+     0,
+     0,
+     0,
+     0,
+     1,
+     1,
+     1,
+     1,
+     1)
+
+error<-c()
+accuracy<-0
+bias<-1
+b0<-0
+b1<-0
+b2<-0
+pred<-c()
+sharpPred<-c()
+alpha<-0.3
+
+while(accuracy<1){
+  for(i in seq_len(length(y))){
+    pred[i]<-1/(1+exp(-(b0+b1*x1[i]+b2*x2[i])))
+    updater<-alpha*(y[i]-pred[i])*pred[i]*(1-pred[i])
+    b0<-b0+updater*bias
+    b1<-b1+updater*x1[i]
+    b2<-b2+updater*x2[i]
+    if(pred[i]<0.5){
+      sharpPred[i]<-0
+    }else{
+      sharpPred[i]<-1
+    }
+    if(y[i]==sharpPred[i]){
+      error[i]<-0
+    }else{
+      error[i]<-1
+    }
+  }
+  accuracy<-1-(sum(error)/length(y))
+}
